@@ -48,36 +48,9 @@ public:
     * @throw std::runtime_error 未知异常
     * @throw std::exception MemCacheClient 内部异常
     */
-    MemcacheProtocolClient()
-        try : m_cMemCacheClientPtr(new MemCacheClient)
-    {
-        m_cMemCacheClientPtr->SetRetryPeriod(1 * 1000);  // 重连时间 1s
+    MemcacheProtocolClient();
 
-        m_cErrorCode2Msg.insert(std::pair<int, std::string>(OK, "OK"));
-        m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOREPLY, "NOREPLY"));
-        m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOTSTORED, "NOTSTORED"));
-        m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOTFOUND, "NOTFOUND"));
-        m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOSERVER, "NOSERVER"));
-    }
-    catch (std::exception &e)
-    {
-        throw e;
-    }
-    catch(...)
-    {
-        throw std::runtime_error("MemcacheProtocolClient::MemcacheProtocolClient() unknown exception.");
-    }
-
-    virtual ~MemcacheProtocolClient()
-    {
-        try
-        {
-        	m_cMemCacheClientPtr->ClearServers();
-        }
-        catch(...)
-        {   // 防止析构的异常逃逸
-        }   
-    }
+    virtual ~MemcacheProtocolClient();
 
     std::string &GetErrorMsg(int _errorCode)
     {
@@ -97,15 +70,15 @@ public:
     * @param [in] _data 包含 Value 的字符串 
     * @param [in] _size Value 字符串的长度
     *
-    * @return Set 操作成功：true；操作失败：false
+    * @return 参见 enum_Result 定义
     *
     * @throw std::exception MemCacheClient 内部异常
     * @throw std::runtime_error 未知异常
     */
-    bool Set(const std::string &_key, const char *_data, size_t _size);
+    int Set(const std::string &_key, const char *_data, size_t _size);
 
     // 基本同上
-    bool Set(const std::string &_key, const std::string &_value)
+    int Set(const std::string &_key, const std::string &_value)
     {
         return Set(_key, _value.c_str(), _value.length());
     }
@@ -146,11 +119,7 @@ public:
 
 protected:
     std::auto_ptr<MemCacheClient> m_cMemCacheClientPtr;
-    std::string m_sHost;
-    std::string m_sPort;
-
     std::map<int, std::string> m_cErrorCode2Msg;
-
     boost::mutex m_cMutex;
 };
 

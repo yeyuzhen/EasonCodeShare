@@ -1,6 +1,37 @@
 #include "MemcacheProtocolClient.h"
 
-bool MemcacheProtocolClient::Set(const std::string &_key, const char *_data, size_t _size)
+MemcacheProtocolClient::MemcacheProtocolClient()
+    try : m_cMemCacheClientPtr(new MemCacheClient)
+{
+    m_cMemCacheClientPtr->SetRetryPeriod(1 * 1000);  // 重连时间 1s
+
+    m_cErrorCode2Msg.insert(std::pair<int, std::string>(OK, "OK"));
+    m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOREPLY, "NOREPLY"));
+    m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOTSTORED, "NOTSTORED"));
+    m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOTFOUND, "NOTFOUND"));
+    m_cErrorCode2Msg.insert(std::pair<int, std::string>(NOSERVER, "NOSERVER"));
+}
+catch (std::exception &e)
+{
+    throw e;
+}
+catch(...)
+{
+    throw std::runtime_error("MemcacheProtocolClient::MemcacheProtocolClient() unknown exception.");
+}
+
+MemcacheProtocolClient::~MemcacheProtocolClient()
+{
+    try
+    {
+        m_cMemCacheClientPtr->ClearServers();
+    }
+    catch(...)
+    {   // 防止析构的异常逃逸
+    }   
+}
+
+int MemcacheProtocolClient::Set(const std::string &_key, const char *_data, size_t _size)
 {
     try
     {
@@ -10,14 +41,9 @@ bool MemcacheProtocolClient::Set(const std::string &_key, const char *_data, siz
         cSetReq.mKey = _key.c_str();
         cSetReq.mData.WriteBytes(_data, _size);
 
-        if(m_cMemCacheClientPtr->Set(cSetReq) == 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        m_cMemCacheClientPtr->Set(cSetReq);
+        
+        return cSetReq.mResult;
     }
     catch(std::exception &e)
     {

@@ -26,7 +26,30 @@ int main(int argc, char *argv[])
     MemcachedClient cMemcachedClient;
     cMemcachedClient.AddServer(sHost, sPort);
 
-    cMemcachedClient.Set("Test", "test");
+    // Get/Set example
+    std::string sGetSetKey("GetSetKey");
+    std::string sGetSetValue("GetSetValue");
+
+    int iSetResult = cMemcachedClient.Set(sGetSetKey, sGetSetValue);
+    if(MemcachedClient::OK == iSetResult)
+    {
+        std::cout << "Set " << sGetSetKey << "=>" << sGetSetValue << " success." << std::endl;
+    }
+    else
+    {
+        std::cout << "Set fail, ErrCode=" << iSetResult << ", ErrMsg=" << cMemcachedClient.GetErrorMsg(iSetResult) << "." << std::endl;
+    }
+
+    std::string sGetResult;
+    int iGetResult = cMemcachedClient.Get(sGetSetKey, sGetResult);
+    if(MemcachedClient::OK == iGetResult)
+    {
+        std::cout << "Get " << sGetSetKey << "=>" << sGetResult << " success." << std::endl;
+    }
+    else
+    {
+        std::cout << "Get fail, ErrCode=" << iGetResult << ", ErrMsg=" << cMemcachedClient.GetErrorMsg(iGetResult) << "." << std::endl;
+    }
 
 #ifdef WIN32
     WSACleanup();
