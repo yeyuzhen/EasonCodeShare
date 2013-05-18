@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
     cMemcachedClient.AddServer(sHost, sPort);
 
     // Get/Set example
-    std::string sGetSetKey("GetSetKey");
-    std::string sGetSetValue("GetSetValue");
+    std::string sGetSetKey("Key");
+    std::string sGetSetValue("Value");
 
     int iSetResult = cMemcachedClient.Set(sGetSetKey, sGetSetValue);
     if(MemcachedClient::OK == iSetResult)
@@ -49,6 +49,34 @@ int main(int argc, char *argv[])
     else
     {
         std::cout << "Get fail, ErrCode=" << iGetResult << ", ErrMsg=" << cMemcachedClient.GetErrorMsg(iGetResult) << "." << std::endl;
+    }
+
+    // CasGet/CasSet example
+    std::string sCasGetCasSetKey("Key");
+    std::string sCasGetValue;
+    boost::uint64_t uCasValue;
+
+    int iCasGetResult = cMemcachedClient.CasGet(sCasGetCasSetKey, sCasGetValue, uCasValue);
+    if (MemcachedClient::OK == iCasGetResult)
+    {
+        std::cout << "CasGet " << sCasGetCasSetKey << "=>" << sCasGetValue << " success." << std::endl;
+    }
+    else
+    {
+        std::cout << "CasGet fail, ErrCode=" << iCasGetResult << ", ErrMsg=" << cMemcachedClient.GetErrorMsg(iCasGetResult) << "." << std::endl;
+    }
+
+    //cMemcachedClient.Set(sGetSetKey, sGetSetValue);
+
+    std::string sCasSetValue("CasSetValue");
+    int iCasSetResult = cMemcachedClient.CasSet(sCasGetCasSetKey, sCasSetValue, uCasValue);
+    if (MemcachedClient::OK == iCasSetResult)
+    {
+        std::cout << "CasSet " << sCasGetCasSetKey << "=>" << sCasSetValue << " success." << std::endl;
+    }
+    else
+    {
+        std::cout << "CasSet fail, ErrCode=" << iCasSetResult << ", ErrMsg=" << cMemcachedClient.GetErrorMsg(iCasSetResult) << "." << std::endl;
     }
 
 #ifdef WIN32

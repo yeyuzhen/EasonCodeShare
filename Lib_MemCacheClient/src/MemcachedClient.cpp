@@ -29,7 +29,7 @@ int MemcachedClient::CasGet(const std::string &_key, std::string &value_, boost:
 }
 
 
-bool MemcachedClient::CasSet(const std::string &_key, const char *_data, size_t _size, boost::uint64_t _cas)
+int MemcachedClient::CasSet(const std::string &_key, const char *_data, size_t _size, boost::uint64_t _cas)
 {
     try
     {
@@ -40,14 +40,9 @@ bool MemcachedClient::CasSet(const std::string &_key, const char *_data, size_t 
         cSetReq.mData.WriteBytes(_data, _size);
         cSetReq.mCas = _cas;
 
-        if(m_cMemCacheClientPtr->CheckSet(cSetReq) == 1)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        m_cMemCacheClientPtr->CheckSet(cSetReq);
+        
+        return cSetReq.mResult;
     }
     catch(std::exception &e)
     {

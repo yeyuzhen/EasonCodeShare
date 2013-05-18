@@ -103,6 +103,7 @@ public:
     * @throw std::exception MemCacheClient 内部抛出的异常
     * @throw std::runtime_error 未知异常
     *
+    * 本函数只判断 _host 和 _port 的规范性，和服务端的可用性无关。
     */
     bool AddServer(const std::string &_host, const std::string &_port);
 

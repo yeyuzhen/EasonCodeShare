@@ -36,15 +36,15 @@ public:
     * @param [in] _size Value 字符串的长度
     * @param [in] _cas CAS 值
     *
-    * @return Set 操作成功：true；操作失败：false
+    * @return 参见 enum_Result 定义，CasSet 失败将返回 -1(NOSERVER)
     *
     * @throw std::exception MemCacheClient 内部异常
     * @throw std::runtime_error 未知异常
     */
-    bool CasSet(const std::string &_key, const char *_data, size_t _size, boost::uint64_t _cas);
+    int CasSet(const std::string &_key, const char *_data, size_t _size, boost::uint64_t _cas);
 
     // 同上
-    bool CasSet(const std::string &_key, const std::string &_value, boost::uint64_t _cas)
+    int CasSet(const std::string &_key, const std::string &_value, boost::uint64_t _cas)
     {
         return CasSet(_key, _value.c_str(), _value.length(), _cas);
     }
