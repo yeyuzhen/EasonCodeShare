@@ -13,9 +13,9 @@ OBJS=Sample.o MemcacheProtocolClient.o MemcachedClient.o
 
 all: $(OBJS)
 	$(CC) -o Sample $(OBJS) $(LDFLAGS) $(LIBS)
-	$(AR) $(ARFLAGS) libmemcacheclient.a $(LIB_OBJS)
+	$(AR) $(ARFLAGS) libMyMemcacheClient.a $(LIB_OBJS)
 	mkdir lib
-	mv libmemcacheclient.a lib 
+	mv libMyMemcacheClient.a lib
 
 clean:
 	rm -rf core *.o lib Sample
