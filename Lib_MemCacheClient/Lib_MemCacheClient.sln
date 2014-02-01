@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lib_MemCacheClient", "Lib_MemCacheClient.vcproj", "{AE338BCA-7C33-4372-B8F5-41EF0792A20D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE338BCA-7C33-4372-B8F5-41EF0792A20D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AE338BCA-7C33-4372-B8F5-41EF0792A20D}.Debug|Win32.Build.0 = Debug|Win32
+		{AE338BCA-7C33-4372-B8F5-41EF0792A20D}.Release|Win32.ActiveCfg = Release|Win32
+		{AE338BCA-7C33-4372-B8F5-41EF0792A20D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
