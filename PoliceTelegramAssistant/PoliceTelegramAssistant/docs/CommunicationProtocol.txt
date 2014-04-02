@@ -1,0 +1,15 @@
+# Using json string over http
+# Check address
+## Request
+   {"ip":"127.0.0.1", "port":"8080", "name":"AAA City Public Security Bureau"}
+## Response
+   {"result":"success", "ip":"", "port":"", "name":""}
+   {"result":"fail", "ip":"127.0.0.1", "port":"8888", "name":"BBB City Public Security Bureau"}
+
+
+# Send telegram information
+## Request
+   {"telegram_id":"20131202001", "document_id":"XXXX", "date_time":"2013-12-02 20:51:38", "department_name":"AAA City Public Security Bureau", "title":"Test", "urgency_level":"", "secret_level":"", "page_number":"5", "operator":"Mr Test", "send_to_list":"AAA|BBB", "copy_to_list":"AAA|BBB", "copy_report_list":"AAA|BBB"}
+## Response
+   {"result":"success"}
+   {"result":"fail"}

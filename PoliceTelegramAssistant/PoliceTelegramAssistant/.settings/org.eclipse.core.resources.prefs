@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+encoding//db/PTA_CreateTable.sql=GBK
+encoding//db/PTA_InsertData.sql=GBK
+encoding//src/HttpClient.py=utf-8
+encoding//src/HttpServer.py=utf-8
+encoding//src/Model.py=utf-8
+encoding//src/PoliceTelegramAssistant.py=utf-8
+encoding//src/Utility.py=utf-8
+encoding//src/View/DisplayAllDepartmentsDialog.py=utf-8
+encoding//src/View/EditTelegramDialog.py=utf-8
+encoding//src/View/LoginDialog.py=utf-8
+encoding//src/View/MainFrame.py=utf-8
+encoding//src/View/SendingDialog.py=utf-8
+encoding//src/View/ViewBase.py=utf-8
+encoding/<project>=UTF-8
