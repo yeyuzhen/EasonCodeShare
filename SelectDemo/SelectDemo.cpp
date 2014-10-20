@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 	address.sin_port = htons(port);
 
 	int listenfd = socket(PF_INET, SOCK_STREAM, 0);
+	int opt = 1;
+	setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 	int ret = bind(listenfd, (struct sockaddr*)&address, sizeof(address));
 	ret = listen(listenfd, 5);
 
@@ -49,13 +51,18 @@ int main(int argc, char *argv[])
 
 	while(1)
 	{
-		memset((void *)&buf, 0x00, sizeof(buf));
+		memset((void *)buf, 0x00, sizeof(buf));
 		FD_SET(connfd, &read_fds);
 		FD_SET(connfd, &exception_fds);
 		ret = select(connfd + 1, &read_fds, NULL, &exception_fds, NULL);
 		if(ret < 0)
 		{
 			printf("select failure!\n");
+			break;
+		}
+
+		if(FD_ISSET(connfd, &exception_fds))
+		{
 			break;
 		}
 
