@@ -87,12 +87,12 @@ void ProcessET(epoll_event *_events, int _number, int _epollFD, int _listenFD)
 		}
 		else if(_events[i].events & EPOLLIN)
 		{
+			printf("et call once.\n");
 			while(1)
 			{
-				printf("et call once.\n");
-				::memset(buffer, 0x00, sizeof(buffer));
+				memset(buffer, 0x00, sizeof(buffer));
 				int recvLen = recv(fd, buffer, BUFFER_SIZE - 1, 0);
-				if(recv < 0)
+				if(recvLen < 0)
 				{
 					if(EAGAIN == errno || EWOULDBLOCK == errno)
 					{
@@ -102,7 +102,7 @@ void ProcessET(epoll_event *_events, int _number, int _epollFD, int _listenFD)
 					close(fd);
 					break;
 				}
-				else if(recv == 0)
+				else if(recvLen == 0)
 				{
 					close(fd);
 				}
@@ -140,6 +140,12 @@ int main(int argc, char *argv[])
 	printf("2\n");
 
 	int listenFD = socket(PF_INET, SOCK_STREAM, 0);
+	int option = 1;
+	if(setsockopt(listenFD, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0)
+	{
+		printf("Set REUSEADDR fail.\n");
+		return (1);
+	}
 	int ret = bind(listenFD, (struct sockaddr*)&listenAddr, sizeof(listenAddr));
 	if(ret < 0)
 	{
