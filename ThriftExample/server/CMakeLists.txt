@@ -1,0 +1,4 @@
+ADD_EXECUTABLE(Server CppServer.cpp)
+TARGET_LINK_LIBRARIES(Server tutorialgencpp thrift)
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/server)

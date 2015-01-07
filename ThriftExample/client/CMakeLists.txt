@@ -1,0 +1,4 @@
+ADD_EXECUTABLE(Client CppClient.cpp)
+TARGET_LINK_LIBRARIES(Client tutorialgencpp thrift)
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/client)
