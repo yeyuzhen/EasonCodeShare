@@ -23,6 +23,7 @@
 #include <thrift/server/TSimpleServer.h>
 #include <thrift/server/TThreadPoolServer.h>
 #include <thrift/server/TThreadedServer.h>
+#include <thrift/server/TNonblockingServer.h>
 #include <thrift/transport/TServerSocket.h>
 #include <thrift/transport/TTransportUtils.h>
 
@@ -30,10 +31,13 @@
 #include <stdexcept>
 #include <sstream>
 
+#include <boost/thread.hpp>
+
 #include "../gen-cpp/Calculator.h"
 
 using namespace std;
 using namespace apache::thrift;
+using namespace apache::thrift::concurrency;
 using namespace apache::thrift::protocol;
 using namespace apache::thrift::transport;
 using namespace apache::thrift::server;
@@ -113,16 +117,30 @@ protected:
 
 int main(int argc, char **argv) {
 
-  shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+//  shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+//  shared_ptr<CalculatorHandler> handler(new CalculatorHandler());
+//  shared_ptr<TProcessor> processor(new CalculatorProcessor(handler));
+//  shared_ptr<TServerTransport> serverTransport(new TServerSocket(9090));
+//  shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
+
+//  TSimpleServer server(processor,
+//                       serverTransport,
+//                       transportFactory,
+//                       protocolFactory);
+
+  // Nonblocking server
   shared_ptr<CalculatorHandler> handler(new CalculatorHandler());
   shared_ptr<TProcessor> processor(new CalculatorProcessor(handler));
-  shared_ptr<TServerTransport> serverTransport(new TServerSocket(9090));
-  shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
 
-  TSimpleServer server(processor,
-                       serverTransport,
-                       transportFactory,
-                       protocolFactory);
+  shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
+
+  shared_ptr<ThreadManager> threadManager = ThreadManager::newSimpleThreadManager(boost::thread::hardware_concurrency());
+  shared_ptr<PosixThreadFactory> threadFactory(new PosixThreadFactory());
+  threadManager->threadFactory(threadFactory);
+  threadManager->start();
+
+  TNonblockingServer server(processor, protocolFactory, 9090, threadManager);
+
 
 
   /**

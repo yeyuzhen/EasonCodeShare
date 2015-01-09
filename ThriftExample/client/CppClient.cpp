@@ -39,7 +39,7 @@ using namespace boost;
 
 int main(int argc, char** argv) {
   shared_ptr<TTransport> socket(new TSocket("localhost", 9090));
-  shared_ptr<TTransport> transport(new TBufferedTransport(socket));
+  shared_ptr<TTransport> transport(new TFramedTransport(socket));
   shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
   CalculatorClient client(protocol);
 
